@@ -1,0 +1,44 @@
+# It's essential to avoid naming the property file in the library as "application.yaml"
+# if the application using the library also has a property file with the same name.
+# This is because there could be conflicts, and the property in the parent project will
+# overwrite the one in the library, leading to issues with reading the property in the application.
+# To resolve this problem, it's recommended to name the property file in the library uniquely,
+# and you can choose any distinct name that fits your library.
+
+info:
+  build:
+    name: @project.name@
+    description: @project.description@
+    group: @project.groupId@
+    artifact: @project.artifactId@
+    version: @project.version@
+
+feign:
+  client:
+    serviceId: sample-service-2
+
+spring:
+  application:
+    name: @application.name@
+
+  cloud:
+    # Feign Client Configurations
+    openfeign:
+      oauth2:
+        enabled: true # Enable OAuth2 support
+        # Using the serviceId as OAuth2 client registrationId is convenient for load-balanced Feign clients.
+        # For non-load-balanced ones, the property-based clientRegistrationId is a suitable approach.
+        clientRegistrationId: auth-server # OAuth2 Client Registration ID
+
+  security:
+    oauth2:
+      client:
+        registration:
+          auth-server:
+            client-id: core-client-id
+            client-secret: core-client-secret
+            scope: openid # comma separated scopes
+            authorization-grant-type: client_credentials
+        provider:
+          auth-server:
+            issuer-uri: http://127.0.0.1:5500 # issuer-uri implementing OIDC

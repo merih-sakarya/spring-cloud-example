@@ -1,0 +1,34 @@
+# Information about the build
+info:
+  build:
+    name: @project.name@
+    description: @project.description@
+    group: @project.groupId@
+    artifact: @project.artifactId@
+    version: @project.version@
+
+# Logging configuration
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.boot.autoconfigure: INFO
+
+spring:
+  application:
+    name: @application.name@
+  cloud:
+    config:
+      uri: http://${CONFIG_SERVER_HOST:localhost}:${CONFIG_SERVER_PORT:8888}/config-server
+      username: ${CONFIG_SERVER_USERNAME:admin}
+      password: ${CONFIG_SERVER_PASSWORD:admin}
+      # The 'label' property is useful for rolling back to previous versions of configuration.
+      # With the default Config Server implementation, it can be a git label, branch name, or commit ID.
+      # Label can also be provided as a comma-separated list. In that case, the items in the list are tried one by one until one succeeds.
+      # This behavior can be useful when working on a feature branch.
+      # For instance, you might want to align the config label with your branch but make it optional (in that case, use spring.cloud.config.label=myfeature,develop).
+      # label: {LABEL_NAME}
+
+      # In some cases, you may want to fail startup of a service if it cannot connect to the Config Server.
+      # If this is the desired behavior, set the bootstrap configuration 'fail-fast=true' to make the client halt with an Exception.
+      fail-fast: true

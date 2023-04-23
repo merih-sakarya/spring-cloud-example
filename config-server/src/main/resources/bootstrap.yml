@@ -1,0 +1,42 @@
+# Information about the build
+info:
+  build:
+    name: @project.name@
+    description: @project.description@
+    group: @project.groupId@
+    artifact: @project.artifactId@
+    version: @project.version@
+
+# Server configuration
+server:
+  port: ${CONFIG_SERVER_PORT:8888}
+  servlet:
+    context-path: /@application.name@
+
+# Spring configuration
+spring:
+  application:
+    name: @application.name@
+  profiles:
+    active: dev
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/merih-sakarya/microservice-example-properties.git
+          default-label: master
+
+# Security configuration for basic authentication
+security:
+  user:
+    name: ${CONFIG_SERVER_USERNAME:admin}
+    password: ${CONFIG_SERVER_PASSWORD:admin}
+
+# To configure an asymmetric key use a keystore (e.g. as created by the keytool utility that comes with the JDK).
+# The keystore properties are encrypt.keyStore.* with * equal to
+# encrypt:
+#   keyStore:
+#     location: # Contains a Resource location. (Ex. classpath:/server.jks)
+#     password: # Holds the password that unlocks the keystore.
+#     alias:    # Identifies which key in the store to use.
+#     type:     # The type of KeyStore to create. Defaults to jks.
