@@ -29,6 +29,10 @@ spring:
         # Using the serviceId as OAuth2 client registrationId is convenient for load-balanced Feign clients.
         # For non-load-balanced ones, the property-based clientRegistrationId is a suitable approach.
         clientRegistrationId: auth-server # OAuth2 Client Registration ID
+      config:
+        sample-service-2:
+          micrometer:
+            enabled: true # Enable Micrometer support
 
   security:
     oauth2:
@@ -42,3 +46,9 @@ spring:
         provider:
           auth-server:
             issuer-uri: http://127.0.0.1:5500 # issuer-uri implementing OIDC
+
+# Logging configuration
+logging:
+  pattern:
+    # Take the span id and trace id from the Mapped Diagnostic Context (MDC) and put them into the log message.
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
