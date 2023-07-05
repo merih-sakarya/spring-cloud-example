@@ -12,7 +12,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/actuator/**").permitAll()
+                .anyRequest().authenticated())
                 .oauth2ResourceServer().jwt(); // configure the application to use JWT token authentication as the mechanism for authenticating requests to the OAuth2 resource server.
         return http.build();
     }

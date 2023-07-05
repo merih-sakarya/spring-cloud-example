@@ -1,15 +1,16 @@
 # Spring Cloud Microservice Example
 
-This project is a sample microservice architecture using Spring Cloud. It demonstrates how to build, deploy, and manage a scalable and maintainable microservice system. The example includes several components such as a discovery server, config server, API gateway, auth server, and multiple sample services.
+This project is a sample microservice architecture using Spring Cloud. It demonstrates how to build, deploy, and manage a scalable and maintainable microservice system. The example includes several components such as a discovery server, config server, API gateway, auth server, multiple sample services, and an observability stack.
 
 1. [Discovery Server](#discovery-server)
 2. [Config Server](#config-server)
 3. [API Gateway](#api-gateway)
 4. [Auth Server](#auth-server)
-5. [Sample Service 1](#sample-service-1)
-6. [Sample Service 1 Client](#sample-service-1-client)
-7. [Sample Service 2](#sample-service-2)
-8. [Sample Service 2 Client](#sample-service-2-client)
+5. [Observability](#observability)
+6. [Sample Service 1](#sample-service-1)
+7. [Sample Service 1 Client](#sample-service-1-client)
+8. [Sample Service 2](#sample-service-2)
+9. [Sample Service 2 Client](#sample-service-2-client)
 
 ## Discovery Server
 
@@ -30,6 +31,20 @@ The API Gateway acts as a single entry point for all microservices within the sy
 
 The Auth Server is responsible for handling authentication and authorization of users, providing secure access to protected resources across microservices.
 [Learn more](./auth-server/README.md)
+
+## Observability
+
+The observability module contains monitoring and logging systems that provide insights into the microservices behavior and performance in real-time. It includes Elasticsearch, Logstash, and Kibana (ELK Stack) for log aggregation, search, and visualization. Additionally, it uses Grafana, Prometheus, and Zipkin for real-time monitoring and tracing of the microservices.
+
+- ### Logging System
+
+  The logging system is based on ELK Stack which collects, processes, and visualizes microservices' logs.
+  [Learn more](./observability/logging-system/README.md)
+
+- ### Monitoring System
+
+  The monitoring system uses Grafana and Prometheus for real-time monitoring, and Zipkin for distributed tracing.
+  [Learn more](./observability/monitoring-system/README.md)
 
 ## Sample Service 1
 
