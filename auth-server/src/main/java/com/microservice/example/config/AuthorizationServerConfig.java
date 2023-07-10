@@ -64,9 +64,13 @@ public class AuthorizationServerConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .redirectUri("http://127.0.0.1:4200/login/oauth2/code/web-client-oidc")
+                .postLogoutRedirectUri("http://127.0.0.1:4200/logged-out")
                 .scope(OidcScopes.OPENID)
                 .tokenSettings(tokenSettings())
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build()).build();
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false)
+                        .requireProofKey(true) // Enable PKCE (RFC-7636)
+                        .build()
+                ).build();
 
         RegisteredClient registeredClient2 = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("core-client-id")
