@@ -1,6 +1,8 @@
 # Auth Server
 
-The Auth Server is a part of the Spring Cloud Microservice example. It is responsible for handling authentication and authorization of users, providing secure access to protected resources across microservices.
+## Overview
+
+The Auth Server is a part of a broader Spring Cloud Microservice example project. It serves as the cornerstone of user security by managing authentication and authorization processes. The server ensures secure access to protected resources across the microservice ecosystem. Built using Java 17 and incorporating state-of-the-art security protocols like OAuth2 and OpenID Connect, the Auth Server offers a robust and secure environment for user management.
 
 ## Features
 
@@ -40,13 +42,30 @@ java -jar target/auth-server-0.0.1-SNAPSHOT.jar
 
 The project uses the `bootstrap.yml` file for its initial configuration. It connects to the Config Server to fetch centralized configuration settings, allowing for easy management and updates of the application's configuration.
 
+## OAuth2
 
-## OAuth2 Authorization Flow
+### Proof Key for Code Exchange (PKCE)
+
+Proof Key for Code Exchange (PKCE) is an OAuth 2.0 extension that adds an additional layer of security to the authorization flow for public clients by preventing the interception of authorization codes by malicious actors. It is particularly useful for Single Page Applications (SPAs) and mobile applications.
+
+To use PKCE, the client should generate a unique **code_verifier** and a corresponding **code_challenge** for every authorization request as part of the Authorization Code flow.
+
+Here are some example values:
+
+- Sample **code_verifier**: "tClcOwZdqiPHHuMo0CyxMked9r1NJ_5_BicA0FI1Q0E"
+- Sample **code_challenge**: "Q0J7-pF3nmAP3XrTmUt6DEFL9vKG9_1V12fXXMTVIqk"
+- Sample **code_challenge_method**: "S256"
+
+The **code_challenge** is a Base64-URL-encoded string of the SHA256 hash of the **code_verifier**. The **code_challenge_method** should be "S256".
+
+Include these parameters when directing the user to the authorization URL and when exchanging the authorization code for an access token. It's crucial to remember that these values should be regenerated for each new authorization request to maintain a high level of security.
+
+### Authorization Flow
 
 1.  **Authorization Request URL:** The client application initiates the authorization request to the Authorization Server.
 
     ```url
-    http://127.0.0.1:5500/oauth2/authorize?response_type=code&client_id=web-client-id&scope=openid&redirect_uri=http://127.0.0.1:4200/login/oauth2/code/web-client-oidc
+    http://127.0.0.1:5500/oauth2/authorize?response_type=code&client_id=web-client-id&scope=openid&redirect_uri=http://127.0.0.1:4200/login/oauth2/code/web-client-oidc&code_challenge={code_challenge}&code_challenge_method={code_challenge_method}
     ```
 
 2.  **Login URL:** The user is prompted to enter their login credentials.
@@ -55,13 +74,13 @@ The project uses the `bootstrap.yml` file for its initial configuration. It conn
     http://127.0.0.1:5500/login
     ```
 
-3.  **Authorization Grant URL:** After the user logs in, they are redirected to this URL to authorize the client application to access their protected resources.
+3.  **Authorization Grant URL:** After successful login, the user is redirected to this URL to give consent to the client application to access their protected resources.
 
     ```url
-    http://127.0.0.1:5500/oauth2/authorize?response_type=code&client_id=web-client&scope=openid&redirect_uri=http://127.0.0.1:4200/login/oauth2/code/web-client-oidc&continue
+    http://127.0.0.1:5500/oauth2/authorize?response_type=code&client_id=web-client&scope=openid&redirect_uri=http://127.0.0.1:4200/login/oauth2/code/web-client-oidc&code_challenge={code_challenge}&code_challenge_method={code_challenge_method}&continue
     ```
 
-4.  **Authorization Code URL:** After the user grants authorization, they are redirected to this URL with a one-time authorization code.
+4.  **Authorization Code URL:** Post user's consent, they are redirected to this URL equipped with a one-time authorization code.
 
     ```url
     http://127.0.0.1:4200/login/oauth2/code/web-client-oidc?code={ONE-TIME-CODE}
@@ -75,11 +94,9 @@ The project uses the `bootstrap.yml` file for its initial configuration. It conn
     --header 'Content-Type: application/x-www-form-urlencoded' \
     --data-urlencode 'code={one time code associated with the authentication event}' \
     --data-urlencode 'grant_type=authorization_code' \
-    --data-urlencode 'redirect_uri=http://127.0.0.1:4200/login/oauth2/code/web-client-oidc'
+    --data-urlencode 'redirect_uri=http://127.0.0.1:4200/login/oauth2/code/web-client-oidc' \
+    --data-urlencode 'code_verifier={code_verifier}'
     ```
-
-## Note
-Please be aware that the current implementation of the Auth Server does not yet support Proof Key for Code Exchange (PKCE). PKCE is an OAuth 2.0 extension that adds an additional layer of security to the authorization flow for public clients by preventing the interception of authorization codes by malicious actors. It is particularly useful for Single Page Applications (SPAs) and mobile applications. We have plans to implement this feature soon to enhance the security of the authorization flow for public clients. In the meantime, ensure that you update your auth-server application to support PKCE once it is available and validate the code_challenge and code_verifier during the authorization flow.
 
 ## Contributing
 

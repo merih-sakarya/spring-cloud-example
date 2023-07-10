@@ -23,7 +23,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/merih-sakarya/microservice-example-properties.git
+          uri: https://github.com/merih-sakarya/spring-cloud-example-properties.git
           default-label: master
 
 # Security configuration for basic authentication
